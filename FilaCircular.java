@@ -10,28 +10,37 @@ public class FilaCircular {
     }
 
     public boolean isFull() {
-        return move(top) == base && data[top] != 0;
+        return move(top) == base && top != -1;
     }
 
     public boolean isEmpty() {
-        return top == -1 || base == (top + 1) % data.length;
+        return top == -1;
     }
 
-    public void add(int element) {
+    // Adiciona um elemento à fila
+    public void add(int element) throws IllegalAccessException {
         if (isFull()) {
-            System.out.println("Fila cheia");
+            throw new IllegalAccessException("Fila Cheia.");
         }
         top = move(top);
         data[top] = element;
+        if (base == -1) {
+            base = top;
+        }
     }
 
-    public int remove() {
+    // Remove o elemento da fila
+    public int remove() throws IllegalAccessException {
         if (isEmpty()) {
-            System.out.println("Fila vazia");
+            throw new IllegalAccessException("Fila Vazia.");
         }
         int element = data[base];
         data[base] = 0;
-        base = move(base);
+        if (base == top) {
+            clear();
+        } else {
+            base = move(base);
+        }
         return element;
     }
 
@@ -45,16 +54,17 @@ public class FilaCircular {
         return (position + 1) % data.length;
     }
 
+    // Imprime a fila
     public void printFila() {
         if (isEmpty()) {
             System.out.println("Fila vazia");
-        } else {
-            System.out.print("Fila: ");
-            for (int i = base; ; i = move(i)) {
-                System.out.print(data[i] + " ");
-                if (i == top) break;
-            }
-            System.out.println();
+            return;
         }
+        System.out.print("Fila: ");
+        for (int i = base; ; i = move(i)) {
+            System.out.print(data[i] + " ");
+            if (i == top) break;
+        }
+        System.out.println();
     }
 }
